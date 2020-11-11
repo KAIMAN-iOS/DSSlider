@@ -38,6 +38,7 @@ public class DSSlider: UIView {
   public let sliderDraggedView = UIView()
   public let sliderDraggedViewTextLabel = UILabel()
   public let sliderImageView = DSRoundImageView()
+  public let sliderLoadingView = UIView()
 
   // MARK: Delegate
 
@@ -50,6 +51,7 @@ public class DSSlider: UIView {
   public var isTextChangeAnimating: Bool = true
   public var isDebugPrintEnabled: Bool = false
   public var resetToStartOnCompletion: Bool = false
+  public var showLoadingOnCompletion: Bool = true
 
   public var isShowSliderText: Bool = true {
     didSet {
@@ -101,6 +103,7 @@ public class DSSlider: UIView {
     didSet {
       sliderBackgroundView.layer.cornerRadius = sliderCornerRadius
       sliderDraggedView.layer.cornerRadius = sliderCornerRadius
+        sliderLoadingView.layer.cornerRadius = sliderCornerRadius
     }
   }
 
@@ -128,6 +131,7 @@ public class DSSlider: UIView {
   public var sliderDraggedViewBackgroundColor: UIColor = UIColor.white {
     didSet {
       sliderDraggedView.backgroundColor = sliderDraggedViewBackgroundColor
+        sliderLoadingView.backgroundColor = sliderDraggedViewBackgroundColor
     }
   }
 
@@ -153,6 +157,7 @@ public class DSSlider: UIView {
   private var topSliderConstraint: NSLayoutConstraint?
   private var topImageViewConstraint: NSLayoutConstraint?
   private var trailingDraggedViewConstraint: NSLayoutConstraint?
+  private var loadingViewWidthConstraint: NSLayoutConstraint?
   private var panGestureRecognizer: UIPanGestureRecognizer?
   private var sliderPosition: DSSliderPosition = .left
 
@@ -208,6 +213,8 @@ public class DSSlider: UIView {
     sliderDraggedView.addSubview(sliderDraggedViewTextLabel)
     sliderBackgroundView.addSubview(sliderBackgroundViewTextLabel)
     sliderView.bringSubviewToFront(sliderImageView)
+    sliderView.addSubview(sliderLoadingView)
+    sliderLoadingView.isHidden = true
   }
 
   private func addPanGesture() {
@@ -225,6 +232,7 @@ public class DSSlider: UIView {
     sliderBackgroundViewTextLabel.translatesAutoresizingMaskIntoConstraints = false
     sliderDraggedViewTextLabel.translatesAutoresizingMaskIntoConstraints = false
     sliderDraggedView.translatesAutoresizingMaskIntoConstraints = false
+    sliderLoadingView.translatesAutoresizingMaskIntoConstraints = false
 
     sliderView.leadingAnchor.constraint(equalTo: self.leadingAnchor).isActive = true
     sliderView.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true
@@ -264,6 +272,12 @@ public class DSSlider: UIView {
     sliderDraggedView.centerYAnchor.constraint(equalTo: sliderBackgroundView.centerYAnchor).isActive = true
     trailingDraggedViewConstraint = sliderDraggedView.trailingAnchor.constraint(equalTo: sliderImageView.trailingAnchor,
                                                                                 constant: sliderImageViewStartingDistance)
+    
+    sliderLoadingView.centerXAnchor.constraint(equalTo: sliderBackgroundView.centerXAnchor).isActive = true
+    loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
+    loadingViewWidthConstraint?.isActive = true
+    sliderLoadingView.topAnchor.constraint(equalTo: sliderBackgroundView.topAnchor).isActive = true
+    sliderLoadingView.bottomAnchor.constraint(equalTo: sliderBackgroundView.bottomAnchor).isActive = true
     trailingDraggedViewConstraint?.isActive = true
   }
 
@@ -285,6 +299,10 @@ public class DSSlider: UIView {
     sliderDraggedView.layer.cornerRadius = sliderCornerRadius
     sliderDraggedView.clipsToBounds = true
     sliderDraggedView.layer.masksToBounds = true
+    sliderLoadingView.backgroundColor = sliderDraggedViewBackgroundColor
+    sliderLoadingView.layer.cornerRadius = sliderCornerRadius
+    sliderLoadingView.clipsToBounds = true
+    sliderLoadingView.layer.masksToBounds = true
   }
 
   // MARK: - Public Methods
@@ -299,6 +317,13 @@ public class DSSlider: UIView {
   public static func dsSliderRedColor() -> UIColor {
     return UIColor.dsSliderRedColor
   }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        loadingViewWidthConstraint?.isActive = false
+        loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
+        loadingViewWidthConstraint?.isActive = true
+    }
 
   // MARK: - Private Methods
 
@@ -390,6 +415,9 @@ public class DSSlider: UIView {
             if resetToStartOnCompletion {
                 resetStateWithAnimation(true)
             }
+            if showLoadingOnCompletion {
+                loadState()
+            }
             return
           }
           updateThumbnail(withPosition: xEndingPoint, andAnimation: true)
@@ -419,4 +447,61 @@ public class DSSlider: UIView {
     default: ()
     }
   }
+    
+    let activity = UIActivityIndicatorView(style: .medium)
+    private func loadState(show: Bool = true) {
+        if show {
+            sliderLoadingView.isHidden = false
+            sliderView.bringSubviewToFront(sliderLoadingView)
+            sliderBackgroundView.isHidden = true
+            sliderDraggedView.isHidden = true
+            sliderImageView.isHidden = true
+        } 
+        activity.alpha = 0
+        activity.color = sliderDraggedViewTextColor
+        sliderView.layoutIfNeeded()
+        
+        loadingViewWidthConstraint?.isActive = false
+        if show {
+            loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderLoadingView.bounds.height)
+        } else {
+            loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
+        }
+        loadingViewWidthConstraint?.isActive = true
+        if show {
+            sliderLoadingView.addSubview(self.activity)
+            activity.startAnimating()
+            activity.alpha = 0
+        } else {
+            activity.removeFromSuperview()
+        }
+        
+        let anim = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) { [weak self] in
+            guard let self = self else { return }
+            self.sliderView.layoutIfNeeded()
+            if show == false {
+                self.resetStateWithAnimation(true)
+            }
+        }
+        
+        anim.addCompletion { [weak self] position in
+            guard let self = self else { return }
+            guard position == .end else { return }
+            self.sliderBackgroundView.alpha = show ? 0 : 1
+            self.sliderDraggedView.alpha = show ? 0 : 1
+            self.sliderImageView.alpha = show ? 0 : 1
+            self.sliderBackgroundView.isHidden = show
+            self.sliderDraggedView.isHidden = show
+            self.sliderImageView.isHidden = show
+            self.sliderLoadingView.isHidden = !show
+            self.activity.alpha = 1
+            self.activity.center = CGPoint(x: self.sliderLoadingView.bounds.midX, y: self.sliderLoadingView.bounds.midX)
+        }
+        anim.startAnimation()
+    }
+    
+    public func resetLoadState() {
+        loadState(show: false)
+    }
 }
+

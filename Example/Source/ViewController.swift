@@ -68,9 +68,8 @@ class ViewController: UIViewController {
 
   private func setupSettings() {}
 
+    lazy var slider = DSSlider(frame: sliderContainer.frame, delegate: self)
   private func setupSlider() {
-    let slider = DSSlider(frame: sliderContainer.frame, delegate: self)
-
     slider.isDoubleSideEnabled = false
     slider.isImageViewRotating = false
     slider.isTextChangeAnimating = true
@@ -112,5 +111,9 @@ extension ViewController: DSSliderDelegate {
   func sliderDidFinishSliding(_ slider: DSSlider, at position: DSSliderPosition) {
     isEmergencySOSActive = position.getBoolValue()
     updateLabel()
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        self.slider.resetLoadState()
+    }
   }
 }
