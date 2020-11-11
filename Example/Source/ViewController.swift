@@ -71,8 +71,8 @@ class ViewController: UIViewController {
   private func setupSlider() {
     let slider = DSSlider(frame: sliderContainer.frame, delegate: self)
 
-    slider.isDoubleSideEnabled = true
-    slider.isImageViewRotating = true
+    slider.isDoubleSideEnabled = false
+    slider.isImageViewRotating = false
     slider.isTextChangeAnimating = true
     slider.isDebugPrintEnabled = false
     slider.isShowSliderText = true

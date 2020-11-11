@@ -49,6 +49,7 @@ public class DSSlider: UIView {
   public var isImageViewRotating: Bool = true
   public var isTextChangeAnimating: Bool = true
   public var isDebugPrintEnabled: Bool = false
+  public var resetToStartOnCompletion: Bool = false
 
   public var isShowSliderText: Bool = true {
     didSet {
@@ -334,8 +335,8 @@ public class DSSlider: UIView {
     guard isEnabled else { return }
     let translatedPoint = sender.translation(in: sliderView).x
     switch sender.state {
-    case .began:
-      dsSliderPrint("Began")
+    case .began: dsSliderPrint("Began")
+        
     case .changed:
       if translatedPoint > 0 {
         dsSliderPrint("Changed - Right")
@@ -373,7 +374,7 @@ public class DSSlider: UIView {
         let angle = reverseTranslatedPoint / ratio
         updateImageView(withAngle: angle)
       }
-      break
+      
     case .ended:
       if translatedPoint > 0 {
         dsSliderPrint("Ended - Right")
@@ -386,7 +387,9 @@ public class DSSlider: UIView {
         } else if translatedPoint >= xEndingPoint {
           guard isDoubleSideEnabled else {
             delegate?.sliderDidFinishSliding(self, at: .rigth)
-            resetStateWithAnimation(true)
+            if resetToStartOnCompletion {
+                resetStateWithAnimation(true)
+            }
             return
           }
           updateThumbnail(withPosition: xEndingPoint, andAnimation: true)
@@ -412,9 +415,8 @@ public class DSSlider: UIView {
           delegate?.sliderDidFinishSliding(self, at: .left)
         }
       }
-      break
-    default:
-      break
+      
+    default: ()
     }
   }
 }
