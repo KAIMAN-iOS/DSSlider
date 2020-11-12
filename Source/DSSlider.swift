@@ -23,6 +23,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // MARK: DSSlider
 
@@ -39,6 +40,7 @@ public class DSSlider: UIView {
   public let sliderDraggedViewTextLabel = UILabel()
   public let sliderImageView = DSRoundImageView()
   public let sliderLoadingView = UIView()
+    private lazy var hiddableViewWhenLoading = [sliderBackgroundView, sliderDraggedView, sliderImageView]
 
   // MARK: Delegate
 
@@ -157,7 +159,6 @@ public class DSSlider: UIView {
   private var topSliderConstraint: NSLayoutConstraint?
   private var topImageViewConstraint: NSLayoutConstraint?
   private var trailingDraggedViewConstraint: NSLayoutConstraint?
-  private var loadingViewWidthConstraint: NSLayoutConstraint?
   private var panGestureRecognizer: UIPanGestureRecognizer?
   private var sliderPosition: DSSliderPosition = .left
 
@@ -272,13 +273,11 @@ public class DSSlider: UIView {
     sliderDraggedView.centerYAnchor.constraint(equalTo: sliderBackgroundView.centerYAnchor).isActive = true
     trailingDraggedViewConstraint = sliderDraggedView.trailingAnchor.constraint(equalTo: sliderImageView.trailingAnchor,
                                                                                 constant: sliderImageViewStartingDistance)
-    
-    sliderLoadingView.centerXAnchor.constraint(equalTo: sliderBackgroundView.centerXAnchor).isActive = true
-    loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
-    loadingViewWidthConstraint?.isActive = true
-    sliderLoadingView.topAnchor.constraint(equalTo: sliderBackgroundView.topAnchor).isActive = true
-    sliderLoadingView.bottomAnchor.constraint(equalTo: sliderBackgroundView.bottomAnchor).isActive = true
     trailingDraggedViewConstraint?.isActive = true
+    
+    sliderLoadingView.snp.makeConstraints { make in
+        make.edges.equalToSuperview()
+    }
   }
 
   private func setupBaseStyle() {
@@ -317,13 +316,6 @@ public class DSSlider: UIView {
   public static func dsSliderRedColor() -> UIColor {
     return UIColor.dsSliderRedColor
   }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        loadingViewWidthConstraint?.isActive = false
-        loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
-        loadingViewWidthConstraint?.isActive = true
-    }
 
   // MARK: - Private Methods
 
@@ -461,13 +453,15 @@ public class DSSlider: UIView {
         activity.color = sliderDraggedViewTextColor
         sliderView.layoutIfNeeded()
         
-        loadingViewWidthConstraint?.isActive = false
-        if show {
-            loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderLoadingView.bounds.height)
-        } else {
-            loadingViewWidthConstraint = sliderLoadingView.widthAnchor.constraint(equalToConstant: sliderBackgroundView.bounds.width)
+        sliderLoadingView.snp.remakeConstraints { make in
+            if show {
+                make.center.equalToSuperview()
+                make.height.equalToSuperview()
+                make.width.equalTo(sliderView.snp.height)
+            } else {
+                make.edges.equalToSuperview()
+            }
         }
-        loadingViewWidthConstraint?.isActive = true
         if show {
             sliderLoadingView.addSubview(self.activity)
             activity.startAnimating()
@@ -479,14 +473,14 @@ public class DSSlider: UIView {
         let anim = UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) { [weak self] in
             guard let self = self else { return }
             self.sliderView.layoutIfNeeded()
-            if show == false {
-                self.resetStateWithAnimation(true)
-            }
         }
         
         anim.addCompletion { [weak self] position in
             guard let self = self else { return }
             guard position == .end else { return }
+            if show == false {
+                self.resetStateWithAnimation(true)
+            }
             self.sliderBackgroundView.alpha = show ? 0 : 1
             self.sliderDraggedView.alpha = show ? 0 : 1
             self.sliderImageView.alpha = show ? 0 : 1

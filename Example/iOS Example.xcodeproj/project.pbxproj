@@ -3,29 +3,18 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C6632BC8255D195700DFA8A8 /* DSSlider in Frameworks */ = {isa = PBXBuildFile; productRef = C6632BC7255D195700DFA8A8 /* DSSlider */; };
 		CE1C362323F17DDC008F5BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1C362223F17DDC008F5BDE /* AppDelegate.swift */; };
 		CE1C362523F17DDC008F5BDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1C362423F17DDC008F5BDE /* SceneDelegate.swift */; };
 		CE1C362723F17DDC008F5BDE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE1C362623F17DDC008F5BDE /* ViewController.swift */; };
 		CE1C362A23F17DDC008F5BDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE1C362823F17DDC008F5BDE /* Main.storyboard */; };
 		CE1C362C23F17DDC008F5BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE1C362B23F17DDC008F5BDE /* Assets.xcassets */; };
 		CE1C362F23F17DDC008F5BDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE1C362D23F17DDC008F5BDE /* LaunchScreen.storyboard */; };
-		CE1C365C23F1870C008F5BDE /* DSSlider.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C365023F1829C008F5BDE /* DSSlider.framework */; };
-		CE1C365D23F1870C008F5BDE /* DSSlider.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = CE1C365023F1829C008F5BDE /* DSSlider.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		CE1C364F23F1829C008F5BDE /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = CE1C364B23F1829C008F5BDE /* DSSlider.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = CE1C35B623F17865008F5BDE;
-			remoteInfo = DSSlider;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		CE1C365E23F1870C008F5BDE /* Embed Frameworks */ = {
@@ -34,7 +23,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				CE1C365D23F1870C008F5BDE /* DSSlider.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -42,6 +30,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C6632BC9255D196D00DFA8A8 /* DSSlider */ = {isa = PBXFileReference; lastKnownFileType = folder; name = DSSlider; path = ..; sourceTree = "<group>"; };
 		CE1C361F23F17DDC008F5BDE /* iOS Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE1C362223F17DDC008F5BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CE1C362423F17DDC008F5BDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +39,6 @@
 		CE1C362B23F17DDC008F5BDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CE1C362E23F17DDC008F5BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CE1C363023F17DDC008F5BDE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CE1C364B23F1829C008F5BDE /* DSSlider.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DSSlider.xcodeproj; path = ../DSSlider.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CE1C365C23F1870C008F5BDE /* DSSlider.framework in Frameworks */,
+				C6632BC8255D195700DFA8A8 /* DSSlider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -68,10 +56,10 @@
 		CE1C361623F17DDC008F5BDE = {
 			isa = PBXGroup;
 			children = (
+				C6632BC9255D196D00DFA8A8 /* DSSlider */,
 				CE1C363C23F17E6A008F5BDE /* Source */,
 				CE1C362123F17DDC008F5BDE /* Resource */,
 				CE1C362023F17DDC008F5BDE /* Products */,
-				CE1C364B23F1829C008F5BDE /* DSSlider.xcodeproj */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,14 +92,6 @@
 			path = Source;
 			sourceTree = "<group>";
 		};
-		CE1C364C23F1829C008F5BDE /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CE1C365023F1829C008F5BDE /* DSSlider.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,6 +109,9 @@
 			dependencies = (
 			);
 			name = "iOS Example";
+			packageProductDependencies = (
+				C6632BC7255D195700DFA8A8 /* DSSlider */,
+			);
 			productName = "iOS Example";
 			productReference = CE1C361F23F17DDC008F5BDE /* iOS Example.app */;
 			productType = "com.apple.product-type.application";
@@ -157,30 +140,17 @@
 				Base,
 			);
 			mainGroup = CE1C361623F17DDC008F5BDE;
+			packageReferences = (
+				C6632BC6255D195700DFA8A8 /* XCRemoteSwiftPackageReference "DSSlider" */,
+			);
 			productRefGroup = CE1C362023F17DDC008F5BDE /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = CE1C364C23F1829C008F5BDE /* Products */;
-					ProjectRef = CE1C364B23F1829C008F5BDE /* DSSlider.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				CE1C361E23F17DDC008F5BDE /* iOS Example */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		CE1C365023F1829C008F5BDE /* DSSlider.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = DSSlider.framework;
-			remoteRef = CE1C364F23F1829C008F5BDE /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		CE1C361D23F17DDC008F5BDE /* Resources */ = {
@@ -400,6 +370,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C6632BC6255D195700DFA8A8 /* XCRemoteSwiftPackageReference "DSSlider" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jerometonnelier/DSSlider";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.0.6;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C6632BC7255D195700DFA8A8 /* DSSlider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C6632BC6255D195700DFA8A8 /* XCRemoteSwiftPackageReference "DSSlider" */;
+			productName = DSSlider;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE1C361723F17DDC008F5BDE /* Project object */;
 }
