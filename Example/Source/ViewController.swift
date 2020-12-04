@@ -107,6 +107,14 @@ class ViewController: UIViewController {
 // MARK: DSSliderDelegate
 
 extension ViewController: DSSliderDelegate {
+    func sliderDidStartDragging() {
+        print("sliderDidStartDragging")
+    }
+    
+    func sliderDidCancelMotion() {
+        print("sliderDidCancelMotion")
+    }
+    
 
   func sliderDidFinishSliding(_ slider: DSSlider, at position: DSSliderPosition) {
     isEmergencySOSActive = position.getBoolValue()

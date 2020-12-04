@@ -27,5 +27,7 @@ import Foundation
 // MARK: DSSliderDelegate
 
 public protocol DSSliderDelegate: class {
-  func sliderDidFinishSliding(_ slider: DSSlider, at position: DSSliderPosition)
+    func sliderDidFinishSliding(_ slider: DSSlider, at position: DSSliderPosition)
+    func sliderDidStartDragging()
+    func sliderDidCancelMotion()
 }
