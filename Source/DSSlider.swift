@@ -444,7 +444,7 @@ public class DSSlider: UIView {
     }
     
     let activity = UIActivityIndicatorView(style: .medium)
-    private func loadState(show: Bool = true) {
+    public final func loadState(show: Bool = true) {
         if show {
             sliderLoadingView.isHidden = false
             sliderView.bringSubviewToFront(sliderLoadingView)
@@ -497,7 +497,7 @@ public class DSSlider: UIView {
         anim.startAnimation()
     }
     
-    public func resetLoadState() {
+    public final func resetLoadState() {
         loadState(show: false)
     }
 }
