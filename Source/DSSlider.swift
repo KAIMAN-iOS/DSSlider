@@ -24,11 +24,43 @@
 
 import UIKit
 import SnapKit
+import Haptica
+import Peep
 
 // MARK: DSSlider
 
 public class DSSlider: UIView {
+    public init() {
+        super.init(frame: .zero)
+        setupView()
+    }
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    required public init?(coder: NSCoder) {
+        super.init(coder: coder)
+        setupView()
+    }
+    public var usesHaptics: Bool = true
+    public var hapticValue: Haptic = .notification(.success)
+    public var hapticSequence: [Note]? = nil //[.haptic(.impact(.light)), .haptic(.impact(.heavy)), .wait(0.1), .haptic(.impact(.heavy)), .haptic(.impact(.light))]
+    // MARK: - Sound
+    public var playSoundOnTouch: Bool = true
+    public var sound: Peepable = KeyPress.tap
     
+    @objc func handleFeedback() {
+        if playSoundOnTouch {
+            Peep.play(sound: sound)
+        }
+        if usesHaptics {
+            if let notes = hapticSequence {
+                Haptic.play(notes)
+            } else {
+                hapticValue.generate()
+            }
+        }
+    }
     // MARK: Public Properties
     
     // MARK: Views
@@ -178,22 +210,10 @@ public class DSSlider: UIView {
     private var animationChangedEnabledBlock:((Bool) -> Void)?
     
     // MARK: - View Lifecycle
-    
-    override public init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        setupView()
-    }
-    
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        setupView()
-    }
-    
     convenience public init(frame: CGRect, delegate: DSSliderDelegate? = nil) {
         self.init(frame: frame)
         self.delegate = delegate
+        
     }
     
     // MARK: - Setup Methods
@@ -400,6 +420,9 @@ public class DSSlider: UIView {
                 guard sliderPosition == .left else { return }
                 if translatedPoint > xStartPoint && translatedPoint < xEndingPoint {
                     delegate?.sliderDidCancelMotion()
+                    hapticValue = .notification(.error)
+                    playSoundOnTouch = false
+                    handleFeedback()
                     updateThumbnail(withPosition: xStartPoint, andAnimation: true)
                     updateTextLabels(withPosition: xStartPoint)
                     updateImageView(withAngle: 0)
@@ -407,6 +430,9 @@ public class DSSlider: UIView {
                 } else if translatedPoint >= xEndingPoint {
                     guard isDoubleSideEnabled else {
                         delegate?.sliderDidFinishSliding(self, at: .rigth)
+                        hapticValue = .notification(.success)
+                        playSoundOnTouch = true
+                        handleFeedback()
                         if resetToStartOnCompletion {
                             resetStateWithAnimation(true)
                         }
@@ -430,12 +456,18 @@ public class DSSlider: UIView {
                     updateTextLabels(withPosition: xEndingPoint)
                     updateImageView(withAngle: CGFloat.pi)
                     sliderPosition = .rigth
+                    hapticValue = .notification(.error)
+                    playSoundOnTouch = false
+                    handleFeedback()
                 } else if reverseTranslatedPoint <= xStartPoint {
                     updateThumbnail(withPosition: xStartPoint, andAnimation: true)
                     updateTextLabels(withPosition: xStartPoint)
                     updateImageView(withAngle: 0)
                     sliderPosition = .left
                     delegate?.sliderDidFinishSliding(self, at: .left)
+                    hapticValue = .notification(.success)
+                    playSoundOnTouch = true
+                    handleFeedback()
                 }
             }
             
